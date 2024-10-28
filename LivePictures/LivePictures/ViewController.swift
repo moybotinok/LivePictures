@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     }()
     lazy var drawingView = {
         let drawingView = DrawingView()
+//        let drawingView = TouchDrawView() 
         self.view.addSubview(drawingView)
         return drawingView
     }()
@@ -31,9 +32,11 @@ class ViewController: UIViewController {
         
         headerView.undoButtonClousure = { [weak self] in
             self?.drawingView.undoButtonPressed()
+//            self?.drawingView.undo()
         }
         headerView.redoButtonClousure = { [weak self] in
             self?.drawingView.redoButtonPressed()
+//            self?.drawingView.redo()
         }
         
     }
