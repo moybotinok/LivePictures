@@ -13,6 +13,7 @@ class DrawingView: UIView {
     var drawingUndoManager = UndoManager()
     var stack: [DrawingUnit] = []
     let settings = DrawingSettings()
+    var previousShot: DrawingShot?
     var image: UIImage? {
         didSet(oldImage) { redrawStack() }
     }
@@ -25,6 +26,13 @@ class DrawingView: UIView {
     private lazy var imageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
+        self.addSubview(imageView)
+        return imageView
+    }()
+    private lazy var previousSketchImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .clear
+        imageView.alpha = 0.5
         self.addSubview(imageView)
         return imageView
     }()
@@ -47,7 +55,29 @@ class DrawingView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundImageView.frame = bounds
+        previousSketchImageView.frame = bounds
         imageView.frame = bounds
+        redrawStack()
+    }
+    
+    func saveShot() -> DrawingShot {
+        previousSketchImageView.image = imageView.image
+        let shot = DrawingShot(units: stack, sketch: imageView.image)
+        imageView.image = nil
+        stack = []
+        drawingUndoManager.removeAllActions()
+        return shot
+    }
+    
+    func replaceShot(shot: DrawingShot?, previousShot: DrawingShot?) {
+        drawingUndoManager.removeAllActions()
+        stack = shot?.units ?? []
+//        for _ in stack.reversed() {
+//            drawingUndoManager.registerUndo(withTarget: self, selector: #selector(popDrawing), object: nil)
+//        }
+//        drawingUndoManager.registerUndo(withTarget: self, selector: #selector(pushAll(_:)), object: stack)
+//        drawingUndoManager.registerUndo(withTarget: self, selector: #selector(pushAll(_:)), object: stack)
+        previousSketchImageView.image = previousShot?.sketch
         redrawStack()
     }
     

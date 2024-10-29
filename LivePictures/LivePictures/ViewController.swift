@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         return tabBarView
     }()
 
+    var shots: [DrawingShot] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,16 @@ class ViewController: UIViewController {
         headerView.redoButtonClousure = { [weak self] in
             self?.drawingView.redoButtonPressed()
 //            self?.drawingView.redo()
+        }
+        
+        headerView.addButtonClousure = { [weak self] in
+            guard let self = self else { return }
+            self.shots.append(self.drawingView.saveShot())
+        }
+        
+        headerView.deleteButtonClousure = { [weak self] in
+            guard let self = self else { return }
+            self.drawingView.replaceShot(shot: self.shots.popLast(), previousShot: self.shots.last)
         }
         
         tabBarView.penButtonClousure = { [weak self] in
