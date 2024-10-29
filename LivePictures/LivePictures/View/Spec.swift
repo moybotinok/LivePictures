@@ -16,23 +16,21 @@ struct Spec {
         static let erase = "erase.png"
         static let bin = "bin.png"
         static let plus = "plus.png"
+        static let play = "play.png"
+        static let stop = "stop.png"
+        static let color = "color.png"
     }
     
     struct Colors {
+        static let defaultDrawing = UIColor.black
         static let tint = UIColor(red: 168/255, green: 219/255, blue: 16/255, alpha: 1)
+        static let lightTextColor = UIColor.white
     }
- 
-    struct HeaderView {
-        static let topOffset = 0
-        static let borderOffset = 0
-        static let height = 50
-    }
-    struct DrawindView {
-        static let borderOffset = 20
-        static let topOffset = 20
-    }
-    struct TabBarView {
-        static let topOffset = 20
-        static let borderOffset = 20
+    
+    struct Frame {
+        struct Button {
+            static let width: CGFloat = 32
+            static let spacing: CGFloat = 8
+        }
     }
 }

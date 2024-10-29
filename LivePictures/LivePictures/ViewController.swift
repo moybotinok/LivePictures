@@ -16,7 +16,6 @@ class ViewController: UIViewController {
     }()
     lazy var drawingView = {
         let drawingView = DrawingView()
-//        let drawingView = TouchDrawView() 
         self.view.addSubview(drawingView)
         return drawingView
     }()
@@ -30,14 +29,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .black
         headerView.undoButtonClousure = { [weak self] in
             self?.drawingView.undoButtonPressed()
-//            self?.drawingView.undo()
         }
         headerView.redoButtonClousure = { [weak self] in
             self?.drawingView.redoButtonPressed()
-//            self?.drawingView.redo()
         }
         
         headerView.addButtonClousure = { [weak self] in
@@ -50,19 +47,33 @@ class ViewController: UIViewController {
             self.drawingView.replaceShot(shot: self.shots.popLast(), previousShot: self.shots.last)
         }
         
+        headerView.playButtonClousure = { [weak self] playing in
+            guard let self = self else { return }
+            headerView.setInstruments(hidden: playing)
+            tabBarView.setInstruments(hidden: playing)
+            if playing {
+                self.shots.append(self.drawingView.saveShot())
+                drawingView.play(shots: self.shots)
+            } else {
+                drawingView.stop()
+                self.drawingView.replaceShot(shot: self.shots.popLast(), previousShot: self.shots.last)
+            }
+        }
+        
         tabBarView.penButtonClousure = { [weak self] in
-            self?.drawingView.settings.color = .black
+            guard let self = self else { return }
+            drawingView.settings.color = drawingView.selectedColor
         }
         tabBarView.eraseButtonClousure = { [weak self] in
             self?.drawingView.settings.color = .clear
         }
+        tabBarView.colorChangedClousure = { [weak self] color in
+            guard let self else { return }
+            drawingView.settings.color = CIColor(color: (color ?? .clear))
+            drawingView.selectedColor = CIColor(color: (color ?? .clear))
+        }
     }
 
-
-    
-    let drawingViewTopOffset = 50
-    let drawingViewBottomOffset = 50
-    let tabBarHeight = 50
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -81,16 +92,39 @@ class ViewController: UIViewController {
             - Int(headerView.frame.maxY)
             - Spec.DrawindView.topOffset
             - Spec.DrawindView.topOffset
-            - drawingViewBottomOffset
-            - tabBarHeight
+            - Spec.DrawindView.bottomOffset
+            - Spec.TabBarView.height
         )
         
         tabBarView.frame = CGRect(
             x: Spec.TabBarView.borderOffset,
             y: Int(drawingView.frame.maxY) ,
             width: Int(frame.width) - Spec.TabBarView.borderOffset * 2,
-            height: 50
+            height: Spec.TabBarView.height
         )
+    }
+    
+    struct Spec {
+        struct HeaderView {
+            static let topOffset = 0
+            static let borderOffset = 0
+            static let height = 44
+        }
+        struct DrawindView {
+            static let borderOffset = 16
+            static let topOffset = 16
+            static let bottomOffset = 50
+        }
+        struct TabBarView {
+            static let topOffset = 20
+            static let borderOffset = 0
+            static let height = 44
+        }
     }
 }
 
+extension ViewController: UIPopoverPresentationControllerDelegate {
+    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
+    }
+}

@@ -11,7 +11,7 @@ class HeaderView: UIView {
     
     lazy var undoButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.undo), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.undo)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
         button.addTarget(self, action: #selector(undoButtonPressed), for: .touchUpInside)
         addSubview(button)
         return button
@@ -19,7 +19,7 @@ class HeaderView: UIView {
     
     lazy var redoButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.redo), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.redo)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
         button.addTarget(self, action: #selector(redoButtonPressed), for: .touchUpInside)
         addSubview(button)
         return button
@@ -27,18 +27,36 @@ class HeaderView: UIView {
     
     lazy var deleteButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.bin), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.bin)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
         button.addTarget(self, action: #selector(deleteButtonPressed), for: .touchUpInside)
-        addSubview(button)
         return button
     }()
     
     lazy var addButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.plus), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.plus)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
         button.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var playButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: Spec.Image.play)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.play)?.withTintColor(Spec.Colors.tint), for: .highlighted)
+        button.setImage(UIImage(named: Spec.Image.stop)?.withTintColor(Spec.Colors.tint), for: .selected)
+        button.addTarget(self, action: #selector(playButtonPressed), for: .touchUpInside)
         addSubview(button)
         return button
+    }()
+    
+    lazy var buttonsStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = Spec.Frame.Button.spacing
+        stackView.addArrangedSubview(deleteButton)
+        stackView.addArrangedSubview(addButton)
+        addSubview(stackView)
+        return stackView
     }()
     
     required init?(coder: NSCoder) {
@@ -52,17 +70,59 @@ class HeaderView: UIView {
     }
     
     func customInit() {
-        
         backgroundColor = .black
+        setupConstraints()
+    }
+    
+    func setupConstraints() {
+        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            buttonsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            buttonsStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        undoButton.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-        redoButton.frame = CGRect(x: 30, y: 0, width: 20, height: 20)
+        let width = 32
+        let height = 32
+        let topOffset = 6
+        let borderOffset = 16
+        let buttonOffset = 8
         
-        deleteButton.frame = CGRect(x: 70, y: 0, width: 20, height: 20)
-        addButton.frame = CGRect(x: 100, y: 0, width: 20, height: 20)
+        undoButton.frame = CGRect(
+            x: borderOffset,
+            y: topOffset,
+            width: width,
+            height: height
+        )
+        redoButton.frame = CGRect(
+            x: borderOffset + width + buttonOffset,
+            y: topOffset,
+            width: width,
+            height: height
+        )
+        
+//        buttonsStackView
+        //        deleteButton.frame = CGRect(
+//            x: (Int(bounds.width) - buttonOffset - width) / 2,
+//            y: topOffset,
+//            width: width,
+//            height: height
+//        )
+//        addButton.frame = CGRect(
+//            x: (Int(bounds.width) - buttonOffset) / 2,
+//            y: topOffset,
+//            width: width,
+//            height: height
+//        )
+        
+        playButton.frame = CGRect(
+            x: Int(bounds.width) - width - borderOffset,
+            y: topOffset,
+            width: width,
+            height: height
+        )
     }
     
     @objc func undoButtonPressed() {
@@ -80,9 +140,21 @@ class HeaderView: UIView {
     @objc func addButtonPressed() {
         addButtonClousure?()
     }
+    @objc func playButtonPressed() {
+        playButton.isSelected = !playButton.isSelected
+        playButtonClousure?(playButton.isSelected)
+    }
+    
+    func setInstruments(hidden: Bool) {
+        redoButton.isHidden = hidden
+        undoButton.isHidden = hidden
+        addButton.isHidden = hidden
+        deleteButton.isHidden = hidden
+    }
     
     var undoButtonClousure: (()->())?
     var redoButtonClousure: (()->())?
     var deleteButtonClousure: (()->())?
     var addButtonClousure: (()->())?
+    var playButtonClousure: ((Bool)->())?
 }

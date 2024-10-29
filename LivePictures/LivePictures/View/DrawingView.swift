@@ -13,7 +13,7 @@ class DrawingView: UIView {
     var drawingUndoManager = UndoManager()
     var stack: [DrawingUnit] = []
     let settings = DrawingSettings()
-    var previousShot: DrawingShot?
+    var selectedColor: CIColor = .black
     var image: UIImage? {
         didSet(oldImage) { redrawStack() }
     }
@@ -78,9 +78,22 @@ class DrawingView: UIView {
 //        drawingUndoManager.registerUndo(withTarget: self, selector: #selector(pushAll(_:)), object: stack)
 //        drawingUndoManager.registerUndo(withTarget: self, selector: #selector(pushAll(_:)), object: stack)
         previousSketchImageView.image = previousShot?.sketch
+        previousSketchImageView.isHidden = false
         redrawStack()
     }
     
+    func play(shots: [DrawingShot]) {
+        previousSketchImageView.isHidden = true
+        imageView.animationImages = shots.compactMap() { $0.sketch }
+        imageView.animationDuration = 2
+        imageView.startAnimating()
+    }
+    
+    func stop() {
+        imageView.stopAnimating()
+//        previousSketchImageView.isHidden = false
+    }
+    //////////
     @objc func popDrawing() {
         drawingUndoManager.registerUndo(withTarget: self,
                                           selector: #selector(pushDrawing(_:)),
@@ -293,7 +306,6 @@ class DrawingView: UIView {
             context!.strokePath()
         }
 
-        /// Draws a line between two points (begins/ends context)
         func drawLineWithContext(fromPoint: CGPoint, toPoint: CGPoint, properties: DrawingSettings) {
             beginImageContext()
             drawCurrentImage()

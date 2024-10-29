@@ -13,16 +13,34 @@ class TabBarView: UIView {
         button.setImage(UIImage(named: Spec.Image.pen), for: .normal)
         button.setImage(UIImage(named: Spec.Image.pen)?.withTintColor(Spec.Colors.tint), for: .selected)
         button.addTarget(self, action: #selector(penButtonPressed), for: .touchUpInside)
-        addSubview(button)
         return button
     }()
+    
     lazy var eraseButton = {
         let button = UIButton()
         button.setImage(UIImage(named: Spec.Image.erase), for: .normal)
         button.setImage(UIImage(named: Spec.Image.erase)?.withTintColor(Spec.Colors.tint), for: .selected)
         button.addTarget(self, action: #selector(eraseButtonPressed), for: .touchUpInside)
-        addSubview(button)
         return button
+    }()
+    
+    lazy var colorWell = {
+        let colorWell = UIColorWell()
+        colorWell.supportsAlpha = false
+        colorWell.selectedColor = Spec.Colors.defaultDrawing
+        colorWell.addTarget(self, action: #selector(colorChanged), for: .valueChanged)
+        return colorWell
+    }()
+    
+    lazy var buttonsStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = Spec.Frame.Button.spacing
+        stackView.addArrangedSubview(penButton)
+        stackView.addArrangedSubview(eraseButton)
+        stackView.addArrangedSubview(colorWell)
+        addSubview(stackView)
+        return stackView
     }()
     
     required init?(coder: NSCoder) {
@@ -38,14 +56,18 @@ class TabBarView: UIView {
     func customInit() {
         
         backgroundColor = .black
+        setupConstraints()
+        penButton.isSelected = true
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        penButton.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-        eraseButton.frame = CGRect(x: 30, y: 0, width: 20, height: 20)
+    func setupConstraints() {
+        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            buttonsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            buttonsStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
-    
+
     @objc func penButtonPressed() {
         penButton.isSelected = !penButton.isSelected
         eraseButton.isSelected = false
@@ -58,6 +80,15 @@ class TabBarView: UIView {
         eraseButtonClousure?()
     }
     
+    @objc func colorChanged(sender: UIColorWell) {
+        colorChangedClousure?(sender.selectedColor)
+    }
+    
     var penButtonClousure: (()->())?
     var eraseButtonClousure: (()->())?
+    var colorChangedClousure: ((UIColor?)->())?
+    
+    func setInstruments(hidden: Bool) {
+        buttonsStackView.isHidden = hidden
+    }
 }
