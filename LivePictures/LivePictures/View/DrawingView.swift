@@ -139,7 +139,9 @@ class DrawingView: UIView {
         /// Triggered when touches begin
         override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             if let touch = touches.first {
-                let stroke = DrawingUnit(points: [touch.location(in: self)], settings: settings)
+                let stroke = DrawingUnit(
+                    points: [touch.location(in: self)],
+                    settings: DrawingSettings(color: settings.color))
                 stack.append(stroke)
             }
         }
@@ -248,16 +250,15 @@ class DrawingView: UIView {
             context!.setLineCap(CGLineCap.round)
             context!.setLineWidth(properties.width)
 
-//            let color = properties.color
-//            if color != nil {
+            if properties.color != .clear {
                 context!.setStrokeColor(red: properties.color.red,
                                         green: properties.color.green,
                                         blue: properties.color.blue,
                                         alpha: properties.color.alpha)
                 context!.setBlendMode(CGBlendMode.normal)
-//            } else {
-//                context!.setBlendMode(CGBlendMode.clear)
-//            }
+            } else {
+                context!.setBlendMode(CGBlendMode.clear)
+            }
 
             context!.strokePath()
         }

@@ -18,6 +18,11 @@ import CoreImage
 }
 
 @objc class DrawingSettings: NSObject {
-    var color: CIColor = CIColor.black //clear
-    var width: CGFloat = 10
+    var color: CIColor //= CIColor.black //clear
+    var width: CGFloat// = 10
+    
+    init(color: CIColor = .black, width: CGFloat = 10) {
+        self.color = color
+        self.width = width
+    }
 }

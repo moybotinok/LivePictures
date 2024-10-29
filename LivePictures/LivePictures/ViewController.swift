@@ -39,6 +39,12 @@ class ViewController: UIViewController {
 //            self?.drawingView.redo()
         }
         
+        tabBarView.penButtonClousure = { [weak self] in
+            self?.drawingView.settings.color = .black
+        }
+        tabBarView.eraseButtonClousure = { [weak self] in
+            self?.drawingView.settings.color = .clear
+        }
     }
 
 
@@ -68,23 +74,12 @@ class ViewController: UIViewController {
             - tabBarHeight
         )
         
-//        tabBarView.frame = CGRect(
-//            x: 0,
-//            y: Int(drawingView.frame.maxY) ,
-//            width: Int(frame.width),
-//            height: 100
-//        )
+        tabBarView.frame = CGRect(
+            x: Spec.TabBarView.borderOffset,
+            y: Int(drawingView.frame.maxY) ,
+            width: Int(frame.width) - Spec.TabBarView.borderOffset * 2,
+            height: 50
+        )
     }
 }
 
-struct Spec {
-    struct HeaderView {
-        static var topOffset = 0
-        static var borderOffset = 0
-        static var height = 50
-    }
-    struct DrawindView {
-        static var borderOffset = 20
-        static var topOffset = 20
-    }
-}
