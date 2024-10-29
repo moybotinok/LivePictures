@@ -276,7 +276,6 @@ class DrawingView: UIView {
             }
         }
 
-        /// Draws a single Stroke (begins/ends context
         func drawStrokeWithContext(_ stroke: DrawingUnit) {
             beginImageContext()
             drawCurrentImage()
@@ -284,7 +283,6 @@ class DrawingView: UIView {
             endImageContext()
         }
 
-        /// Draws a line between two points
         func drawLine(fromPoint: CGPoint, toPoint: CGPoint, properties: DrawingSettings) {
             let context = UIGraphicsGetCurrentContext()
             context!.move(to: CGPoint(x: fromPoint.x, y: fromPoint.y))

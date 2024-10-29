@@ -62,9 +62,15 @@ class TabBarView: UIView {
     
     func setupConstraints() {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        penButton.translatesAutoresizingMaskIntoConstraints = false
+        eraseButton.translatesAutoresizingMaskIntoConstraints = false
+        colorWell.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             buttonsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            buttonsStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            buttonsStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            penButton.widthAnchor.constraint(equalTo: penButton.heightAnchor),
+            eraseButton.widthAnchor.constraint(equalTo: eraseButton.heightAnchor),
+            colorWell.widthAnchor.constraint(equalTo: colorWell.heightAnchor)
         ])
     }
 
