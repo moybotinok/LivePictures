@@ -22,9 +22,10 @@ struct Spec {
     }
     
     struct Colors {
-        static let defaultDrawing = UIColor.black
-        static let tint = UIColor(red: 168/255, green: 219/255, blue: 16/255, alpha: 1)
-        static let lightTextColor = UIColor.white
+        static let background = UIColor(named: "backgroundColor")
+        static let iconsColor = UIColor(named: "iconsColor") ?? .black
+        static let tint = UIColor(named: "tintColor") ?? .black
+        static let defaultDrawing = UIColor(named: "backgroundColor") ?? .black //UIColor.black
     }
     
     struct Frame {

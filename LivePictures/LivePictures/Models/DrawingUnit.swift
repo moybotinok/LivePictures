@@ -22,7 +22,7 @@ import CoreImage
     var color: CIColor
     var width: CGFloat
     
-    init(color: CIColor = .black, width: CGFloat = 10) {
+    init(color: CIColor = CIColor(color: Spec.Colors.defaultDrawing), width: CGFloat = 10) {
         self.color = color
         self.width = width
     }

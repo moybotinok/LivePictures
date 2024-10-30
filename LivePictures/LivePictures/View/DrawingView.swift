@@ -28,10 +28,19 @@ class DrawingView: UIView {
     }
     
     private lazy var backgroundImageView = {
-        let imageView = UIImageView(image: UIImage(named: "background.png"))
+        var image = UIImage(named: "background.png")
+        let imageView = UIImageView(image: image)
+//        let imageView = UIImageView(image: invertImage(image: image!))
         self.addSubview(imageView)
         return imageView
     }()
+//    func invertImage(image: UIImage) -> UIImage {
+//        let origImage = CIImage(image: image)
+//        let filter = CIFilter(name: "CIColorInvert")
+//        filter?.setValue(origImage, forKey: kCIInputImageKey)
+//        let invertedImage = UIImage(ciImage: (filter?.outputImage!)!)
+//        return invertedImage
+//    }
     private lazy var imageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
@@ -67,6 +76,10 @@ class DrawingView: UIView {
         previousSketchImageView.frame = bounds
         imageView.frame = bounds
         redrawStack()
+    }
+    
+    func updateLayer() {
+        
     }
     
     func saveShot() -> DrawingShot {

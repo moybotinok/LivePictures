@@ -10,7 +10,7 @@ class TabBarView: UIView {
     
     lazy var penButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.pen), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.pen)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
         button.setImage(UIImage(named: Spec.Image.pen)?.withTintColor(Spec.Colors.tint), for: .selected)
         button.addTarget(self, action: #selector(penButtonPressed), for: .touchUpInside)
         return button
@@ -18,7 +18,7 @@ class TabBarView: UIView {
     
     lazy var eraseButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.erase), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.erase)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
         button.setImage(UIImage(named: Spec.Image.erase)?.withTintColor(Spec.Colors.tint), for: .selected)
         button.addTarget(self, action: #selector(eraseButtonPressed), for: .touchUpInside)
         return button
@@ -55,7 +55,7 @@ class TabBarView: UIView {
     
     func customInit() {
         
-        backgroundColor = .black
+        backgroundColor = Spec.Colors.background
         setupConstraints()
         penButton.isSelected = true
     }

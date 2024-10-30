@@ -11,7 +11,7 @@ class HeaderView: UIView {
     
     lazy var undoButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.undo)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.undo)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
         button.addTarget(self, action: #selector(undoButtonPressed), for: .touchUpInside)
         addSubview(button)
         return button
@@ -19,7 +19,7 @@ class HeaderView: UIView {
     
     lazy var redoButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.redo)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.redo)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
         button.addTarget(self, action: #selector(redoButtonPressed), for: .touchUpInside)
         addSubview(button)
         return button
@@ -28,21 +28,21 @@ class HeaderView: UIView {
     lazy var deleteButton = {
         let button = UIButton()
 //        button.isEnabled = false
-        button.setImage(UIImage(named: Spec.Image.bin)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.bin)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
         button.addTarget(self, action: #selector(deleteButtonPressed), for: .touchUpInside)
         return button
     }()
     
     lazy var addButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.plus)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.plus)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
         button.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
         return button
     }()
     
     lazy var playButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Spec.Image.play)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.play)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
         button.setImage(UIImage(named: Spec.Image.play)?.withTintColor(Spec.Colors.tint), for: .highlighted)
         button.setImage(UIImage(named: Spec.Image.stop)?.withTintColor(Spec.Colors.tint), for: .selected)
         button.addTarget(self, action: #selector(playButtonPressed), for: .touchUpInside)
@@ -71,7 +71,7 @@ class HeaderView: UIView {
     }
     
     func customInit() {
-        backgroundColor = .black
+        backgroundColor = Spec.Colors.background
         setupConstraints()
     }
     

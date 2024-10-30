@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = Spec.Colors.background
         drawingView.undoDelegate = self
 //        drawingView.replaceShot(shot: nil, previousShot: nil)
         headerView.undoButtonClousure = { [weak self] in
@@ -85,32 +85,32 @@ class ViewController: UIViewController {
         
         let frame = view.frame
         headerView.frame = CGRect(
-            x: Spec.HeaderView.borderOffset,
-            y: Int(view.safeAreaLayoutGuide.layoutFrame.minY) + Spec.HeaderView.topOffset,
-            width: Int(frame.width) - (Spec.HeaderView.borderOffset * 2),
-            height: Spec.HeaderView.height
+            x: VCSpec.HeaderView.borderOffset,
+            y: Int(view.safeAreaLayoutGuide.layoutFrame.minY) + VCSpec.HeaderView.topOffset,
+            width: Int(frame.width) - (VCSpec.HeaderView.borderOffset * 2),
+            height: VCSpec.HeaderView.height
         )
         drawingView.frame = CGRect(
-            x: Spec.DrawindView.borderOffset,
-            y: Int(headerView.frame.maxY) + Spec.DrawindView.topOffset,
-            width: Int(frame.width) - (Spec.DrawindView.borderOffset * 2),
+            x: VCSpec.DrawindView.borderOffset,
+            y: Int(headerView.frame.maxY) + VCSpec.DrawindView.topOffset,
+            width: Int(frame.width) - (VCSpec.DrawindView.borderOffset * 2),
             height: Int(frame.height)
             - Int(headerView.frame.maxY)
-            - Spec.DrawindView.topOffset
-            - Spec.DrawindView.topOffset
-            - Spec.DrawindView.bottomOffset
-            - Spec.TabBarView.height
+            - VCSpec.DrawindView.topOffset
+            - VCSpec.DrawindView.topOffset
+            - VCSpec.DrawindView.bottomOffset
+            - VCSpec.TabBarView.height
         )
         
         tabBarView.frame = CGRect(
-            x: Spec.TabBarView.borderOffset,
+            x: VCSpec.TabBarView.borderOffset,
             y: Int(drawingView.frame.maxY) ,
-            width: Int(frame.width) - Spec.TabBarView.borderOffset * 2,
-            height: Spec.TabBarView.height
+            width: Int(frame.width) - VCSpec.TabBarView.borderOffset * 2,
+            height: VCSpec.TabBarView.height
         )
     }
     
-    struct Spec {
+    struct VCSpec {
         struct HeaderView {
             static let topOffset = 0
             static let borderOffset = 0
