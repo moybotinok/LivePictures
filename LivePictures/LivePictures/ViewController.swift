@@ -73,13 +73,79 @@ class ViewController: UIViewController {
         tabBarView.eraseButtonClousure = { [weak self] in
             self?.drawingView.settings.color = .clear
         }
+//        tabBarView.paintButtonClousure = { [weak self] in
+//
+//        }
         tabBarView.colorChangedClousure = { [weak self] color in
             guard let self else { return }
             drawingView.settings.color = CIColor(color: (color ?? .clear))
             drawingView.selectedColor = CIColor(color: (color ?? .clear))
         }
+        tabBarView.saveButtonClousure = { [weak self] in
+            self?.saveButtonPressed()
+        }
+        tabBarView.downloadButtonClousure = { [weak self] in
+            self?.downloadButtonPressed()
+        }
     }
 
+    func saveButtonPressed() {
+        
+        let exportData = shots.map{ ExportShot(units: $0.units.map{ $0.points }) }
+        guard let json = try? JSONEncoder().encode(exportData) else { return }
+        let string: String? = String(data: json, encoding: .utf8)
+        print(string!)
+        writeToFile(jsonString: string!)
+        
+    }
+    
+    func downloadButtonPressed() {
+        let s = readFromFile()
+        let downloadedShots = shotsFromJSON(json: s!)
+        shots = downloadedShots
+        
+        drawingView.updateSkatches(shots: shots)
+        drawingView.replaceShot(shot: shots.popLast(), previousShot: shots.last)
+    }
+    
+    func shotsFromJSON(json: String) -> [DrawingShot] {
+        guard let data = json.data(using: .utf8) else { return [] }
+        let shots = try? JSONDecoder().decode([ExportShot].self, from: data)
+        let r = shots!.map{ DrawingShot.init(units: $0.units.map{ DrawingUnit(points: $0) } ) }
+        
+        return r
+    }
+    
+    func writeToFile(jsonString: String) {
+        
+        if let documentDirectory = FileManager.default.urls(for: .documentDirectory,
+                                                            in: .userDomainMask).first {
+            let pathWithFilename = documentDirectory.appendingPathComponent("myJsonString.json")
+            do {
+                try jsonString.write(to: pathWithFilename,
+                                     atomically: true,
+                                     encoding: .utf8)
+            } catch {
+                print("Handle error")
+            }
+        }
+    }
+    
+    func readFromFile() -> String? {
+        
+        if let documentDirectory = FileManager.default.urls(for: .documentDirectory,
+                                                            in: .userDomainMask).first {
+            let pathWithFilename = documentDirectory.appendingPathComponent("myJsonString.json")
+            do {
+                let text2 = try String(contentsOf: pathWithFilename, encoding: .utf8)
+                return text2
+            } catch {
+                print("Handle error")
+            }
+        }
+        return nil
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         

@@ -210,6 +210,26 @@ class DrawingView: UIView {
 //        undoDelegate?.setDelete(enable: stack.count > 0)
     }
     
+    func updateSkatches(shots: [DrawingShot]) {
+        _ = shots.map { shot in
+            if shot.sketch != nil { return }
+            shot.sketch = drawShot(shot: shot)
+        }
+    }
+    func drawShot(shot: DrawingShot) -> UIImage? {
+        if imageView.frame.size == .zero { return nil }
+        beginImageContext()
+//        image?.draw(in: imageView.bounds)
+//        imageView.image?.draw(in: imageView.bounds)
+
+        for stroke in shot.units {
+            drawStroke(stroke)
+        }
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return result
+    }
+    
 }
 
 // MARK: - Touch Actions
@@ -270,7 +290,8 @@ fileprivate extension DrawingView {
     }
     
     func endImageContext() {
-        imageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        imageView.image = result
         UIGraphicsEndImageContext()
     }
     
@@ -281,7 +302,6 @@ fileprivate extension DrawingView {
     func redrawStack() {
         if imageView.frame.size == .zero { return }
         beginImageContext()
-        //            imageView.image?.draw(in: imageView.bounds)
         image?.draw(in: imageView.bounds)
         
         for stroke in stack {

@@ -23,6 +23,29 @@ class TabBarView: UIView {
         button.addTarget(self, action: #selector(eraseButtonPressed), for: .touchUpInside)
         return button
     }()
+    lazy var paintButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: Spec.Image.paint)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.paint)?.withTintColor(Spec.Colors.tint), for: .selected)
+        button.addTarget(self, action: #selector(paintButtonPressed), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var saveButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: Spec.Image.save)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.save)?.withTintColor(Spec.Colors.tint), for: .selected)
+        button.addTarget(self, action: #selector(saveButtonPressed), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var downloadButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: Spec.Image.download)?.withTintColor(Spec.Colors.iconsColor), for: .normal)
+        button.setImage(UIImage(named: Spec.Image.download)?.withTintColor(Spec.Colors.tint), for: .selected)
+        button.addTarget(self, action: #selector(downloadButtonPressed), for: .touchUpInside)
+        return button
+    }()
     
     lazy var colorWell = {
         let colorWell = UIColorWell()
@@ -38,7 +61,10 @@ class TabBarView: UIView {
         stackView.spacing = Spec.Frame.Button.spacing
         stackView.addArrangedSubview(penButton)
         stackView.addArrangedSubview(eraseButton)
+        stackView.addArrangedSubview(paintButton)
         stackView.addArrangedSubview(colorWell)
+        stackView.addArrangedSubview(saveButton)
+        stackView.addArrangedSubview(downloadButton)
         addSubview(stackView)
         return stackView
     }()
@@ -64,12 +90,18 @@ class TabBarView: UIView {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         penButton.translatesAutoresizingMaskIntoConstraints = false
         eraseButton.translatesAutoresizingMaskIntoConstraints = false
+        paintButton.translatesAutoresizingMaskIntoConstraints = false
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        downloadButton.translatesAutoresizingMaskIntoConstraints = false
         colorWell.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            buttonsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Spec.Frame.border),
             buttonsStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             penButton.widthAnchor.constraint(equalTo: penButton.heightAnchor),
             eraseButton.widthAnchor.constraint(equalTo: eraseButton.heightAnchor),
+            paintButton.widthAnchor.constraint(equalTo: paintButton.heightAnchor),
+            saveButton.widthAnchor.constraint(equalTo: paintButton.heightAnchor),
+            downloadButton.widthAnchor.constraint(equalTo: paintButton.heightAnchor),
             colorWell.widthAnchor.constraint(equalTo: colorWell.heightAnchor)
         ])
     }
@@ -86,12 +118,27 @@ class TabBarView: UIView {
         eraseButtonClousure?()
     }
     
+    @objc func paintButtonPressed() {
+        paintButtonClousure?()
+    }
+    
+    @objc func saveButtonPressed() {
+        saveButtonClousure?()
+    }
+    
+    @objc func downloadButtonPressed() {
+        downloadButtonClousure?()
+    }
+    
     @objc func colorChanged(sender: UIColorWell) {
         colorChangedClousure?(sender.selectedColor)
     }
     
     var penButtonClousure: (()->())?
     var eraseButtonClousure: (()->())?
+    var paintButtonClousure: (()->())?
+    var saveButtonClousure: (()->())?
+    var downloadButtonClousure: (()->())?
     var colorChangedClousure: ((UIColor?)->())?
     
     func setInstruments(hidden: Bool) {

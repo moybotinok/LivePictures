@@ -29,11 +29,20 @@ import CoreImage
 }
 
 class DrawingShot {
-    var units: [DrawingUnit]
+    var units: [DrawingUnit] 
     var sketch: UIImage?
     
-    init(units: [DrawingUnit], sketch: UIImage?) {
+    init(units: [DrawingUnit], sketch: UIImage? = nil) {
         self.units = units
         self.sketch = sketch
     }
 }
+
+class ExportShot: Codable {
+    var units: [[CGPoint]]
+    
+    init(units: [[CGPoint]]) {
+        self.units = units
+    }
+}
+

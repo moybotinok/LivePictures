@@ -18,7 +18,10 @@ struct Spec {
         static let plus = "plus.png"
         static let play = "play.png"
         static let stop = "stop.png"
-        static let color = "color.png"
+        static let paint = "paint.png"
+        
+        static let save = "square.and.arrow.down"
+        static let download = "square.and.arrow.up"
     }
     
     struct Colors {
@@ -29,6 +32,8 @@ struct Spec {
     }
     
     struct Frame {
+        static let border: CGFloat = 16
+        
         struct Button {
             static let width: CGFloat = 32
             static let spacing: CGFloat = 8
