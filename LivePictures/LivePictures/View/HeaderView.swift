@@ -27,6 +27,7 @@ class HeaderView: UIView {
     
     lazy var deleteButton = {
         let button = UIButton()
+//        button.isEnabled = false
         button.setImage(UIImage(named: Spec.Image.bin)?.withTintColor(Spec.Colors.lightTextColor), for: .normal)
         button.addTarget(self, action: #selector(deleteButtonPressed), for: .touchUpInside)
         return button
@@ -157,4 +158,14 @@ class HeaderView: UIView {
     var deleteButtonClousure: (()->())?
     var addButtonClousure: (()->())?
     var playButtonClousure: ((Bool)->())?
+    
+    func setUndo(enable: Bool) {
+        undoButton.isEnabled = enable
+    }
+    func setRedo(enable: Bool) {
+        redoButton.isEnabled = enable
+    }
+    func setDelete(enable: Bool) {
+        deleteButton.isEnabled = enable
+    }
 }

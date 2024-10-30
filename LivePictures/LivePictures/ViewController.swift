@@ -25,11 +25,17 @@ class ViewController: UIViewController {
         return tabBarView
     }()
 
-    var shots: [DrawingShot] = []
+    var shots: [DrawingShot] = [] {
+        didSet {
+//            headerView.setDelete(enable: !shots.isEmpty)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        drawingView.undoDelegate = self
+//        drawingView.replaceShot(shot: nil, previousShot: nil)
         headerView.undoButtonClousure = { [weak self] in
             self?.drawingView.undoButtonPressed()
         }
@@ -123,8 +129,14 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UIPopoverPresentationControllerDelegate {
-    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
+extension ViewController: UndoDelegate {
+    func setUndo(enable: Bool) {
+        headerView.setUndo(enable: enable)
+    }
+    func setRedo(enable: Bool) {
+        headerView.setRedo(enable: enable)
+    }
+    func setDelete(enable: Bool) {
+        headerView.setDelete(enable: enable)
     }
 }
