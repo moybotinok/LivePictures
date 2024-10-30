@@ -34,6 +34,20 @@ struct Spec {
     struct Frame {
         static let border: CGFloat = 16
         
+        struct HeaderView {
+            static let height: CGFloat = 44
+        }
+        
+        struct TabBarView {
+            static let height: CGFloat = 44
+        }
+        
+        struct DrawindView {
+            static let border: CGFloat  = 16
+            static let top: CGFloat = 16
+            static let bottom: CGFloat = 16
+        }
+        
         struct Button {
             static let width: CGFloat = 32
             static let spacing: CGFloat = 8

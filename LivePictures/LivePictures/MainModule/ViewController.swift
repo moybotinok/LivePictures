@@ -41,6 +41,7 @@ class ViewController: UIViewController {
         
         setupHeaderView()
         setupTabBarView()
+        setupConstraints()
     }
     
     func setupHeaderView() {
@@ -110,52 +111,26 @@ class ViewController: UIViewController {
         drawingView.replaceShot(shot: shots.popLast(), previousShot: shots.last)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let frame = view.frame
-        headerView.frame = CGRect(
-            x: VCSpec.HeaderView.borderOffset,
-            y: Int(view.safeAreaLayoutGuide.layoutFrame.minY) + VCSpec.HeaderView.topOffset,
-            width: Int(frame.width) - (VCSpec.HeaderView.borderOffset * 2),
-            height: VCSpec.HeaderView.height
-        )
-        drawingView.frame = CGRect(
-            x: VCSpec.DrawindView.borderOffset,
-            y: Int(headerView.frame.maxY) + VCSpec.DrawindView.topOffset,
-            width: Int(frame.width) - (VCSpec.DrawindView.borderOffset * 2),
-            height: Int(frame.height)
-            - Int(headerView.frame.maxY)
-            - VCSpec.DrawindView.topOffset
-            - VCSpec.DrawindView.topOffset
-            - VCSpec.DrawindView.bottomOffset
-            - VCSpec.TabBarView.height
-        )
-        
-        tabBarView.frame = CGRect(
-            x: VCSpec.TabBarView.borderOffset,
-            y: Int(drawingView.frame.maxY) ,
-            width: Int(frame.width) - VCSpec.TabBarView.borderOffset * 2,
-            height: VCSpec.TabBarView.height
-        )
-    }
-    
-    struct VCSpec {
-        struct HeaderView {
-            static let topOffset = 0
-            static let borderOffset = 0
-            static let height = 44
-        }
-        struct DrawindView {
-            static let borderOffset = 16
-            static let topOffset = 16
-            static let bottomOffset = 50
-        }
-        struct TabBarView {
-            static let topOffset = 20
-            static let borderOffset = 0
-            static let height = 44
-        }
+    func setupConstraints() {
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        drawingView.translatesAutoresizingMaskIntoConstraints = false
+        tabBarView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: Spec.Frame.HeaderView.height),
+            
+            drawingView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: Spec.Frame.DrawindView.top),
+            drawingView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Spec.Frame.DrawindView.border),
+            drawingView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Spec.Frame.DrawindView.border),
+            drawingView.bottomAnchor.constraint(equalTo: tabBarView.topAnchor, constant: -Spec.Frame.DrawindView.bottom),
+
+            tabBarView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tabBarView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tabBarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tabBarView.heightAnchor.constraint(equalToConstant: Spec.Frame.TabBarView.height)
+        ])
     }
 }
 
