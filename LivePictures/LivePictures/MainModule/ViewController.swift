@@ -31,11 +31,19 @@ class ViewController: UIViewController {
         }
     }
     
+    let shotsStorage = ShotsStorage()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = Spec.Colors.background
         drawingView.undoDelegate = self
-//        drawingView.replaceShot(shot: nil, previousShot: nil)
+        
+        setupHeaderView()
+        setupTabBarView()
+    }
+    
+    func setupHeaderView() {
         headerView.undoButtonClousure = { [weak self] in
             self?.drawingView.undoButtonPressed()
         }
@@ -65,7 +73,9 @@ class ViewController: UIViewController {
                 self.drawingView.replaceShot(shot: self.shots.popLast(), previousShot: self.shots.last)
             }
         }
-        
+    }
+    
+    func setupTabBarView() {
         tabBarView.penButtonClousure = { [weak self] in
             guard let self = self else { return }
             drawingView.settings.color = drawingView.selectedColor
@@ -90,60 +100,14 @@ class ViewController: UIViewController {
     }
 
     func saveButtonPressed() {
-        
-        let exportData = shots.map{ ExportShot(units: $0.units.map{ $0.points }) }
-        guard let json = try? JSONEncoder().encode(exportData) else { return }
-        let string: String? = String(data: json, encoding: .utf8)
-        print(string!)
-        writeToFile(jsonString: string!)
-        
+        shotsStorage.save(shots: shots)
     }
     
     func downloadButtonPressed() {
-        let s = readFromFile()
-        let downloadedShots = shotsFromJSON(json: s!)
-        shots = downloadedShots
+        shots = shotsStorage.fetch()
         
         drawingView.updateSkatches(shots: shots)
         drawingView.replaceShot(shot: shots.popLast(), previousShot: shots.last)
-    }
-    
-    func shotsFromJSON(json: String) -> [DrawingShot] {
-        guard let data = json.data(using: .utf8) else { return [] }
-        let shots = try? JSONDecoder().decode([ExportShot].self, from: data)
-        let r = shots!.map{ DrawingShot.init(units: $0.units.map{ DrawingUnit(points: $0) } ) }
-        
-        return r
-    }
-    
-    func writeToFile(jsonString: String) {
-        
-        if let documentDirectory = FileManager.default.urls(for: .documentDirectory,
-                                                            in: .userDomainMask).first {
-            let pathWithFilename = documentDirectory.appendingPathComponent("myJsonString.json")
-            do {
-                try jsonString.write(to: pathWithFilename,
-                                     atomically: true,
-                                     encoding: .utf8)
-            } catch {
-                print("Handle error")
-            }
-        }
-    }
-    
-    func readFromFile() -> String? {
-        
-        if let documentDirectory = FileManager.default.urls(for: .documentDirectory,
-                                                            in: .userDomainMask).first {
-            let pathWithFilename = documentDirectory.appendingPathComponent("myJsonString.json")
-            do {
-                let text2 = try String(contentsOf: pathWithFilename, encoding: .utf8)
-                return text2
-            } catch {
-                print("Handle error")
-            }
-        }
-        return nil
     }
     
     override func viewDidLayoutSubviews() {

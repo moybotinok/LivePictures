@@ -104,20 +104,6 @@ class HeaderView: UIView {
             height: height
         )
         
-//        buttonsStackView
-        //        deleteButton.frame = CGRect(
-//            x: (Int(bounds.width) - buttonOffset - width) / 2,
-//            y: topOffset,
-//            width: width,
-//            height: height
-//        )
-//        addButton.frame = CGRect(
-//            x: (Int(bounds.width) - buttonOffset) / 2,
-//            y: topOffset,
-//            width: width,
-//            height: height
-//        )
-        
         playButton.frame = CGRect(
             x: Int(bounds.width) - width - borderOffset,
             y: topOffset,
